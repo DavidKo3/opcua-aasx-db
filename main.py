@@ -77,12 +77,12 @@ def load_swir(path):
     return img_transformed
 
 def predict():
-    train_path = "C:/Users/hojun_window/Desktop/Work/오즈레이AAS/_tomato"
+    train_path = "F:/_data/_Food/pytorch_tomato_split_v2/train"
     file = glob.glob(train_path + "/**/*.raw", recursive=True)
     # print(file)
-    test_num = 78
+    # test_num = 78
     model_path = "./model_v3"
-    epoch = 30
+    epoch = 56
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     PATH = os.path.join(model_path, f"tomato_ripeness_{epoch}_" + ".pt")
@@ -98,7 +98,7 @@ def predict():
             transformed_img, label = test_dataloader[num]
             # volr.volumerender_sim(transformed_img.numpy(), 256, 256, 256)
 
-            model = MobileNet().to(device)
+            # model = MobileNet().to(device)
             input_expands_tensor = transformed_img.unsqueeze(0) #[ch x with x height]-> [1 xch x with x height]
             model(input_expands_tensor.cuda())
 
@@ -112,7 +112,7 @@ def predict():
             # db.insert_predicted(pred)
             db.insert_value(table_name="RESULT", column_name="RESULT_TOMATO_RIPENESS", val=pred)
             print(f"Saved to RESULT table")
-    
+
 if __name__ == '__main__':
     # 인자값 받을 수 있는 인스턴스 생성
     parser = argparse.ArgumentParser(description='Set option')
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     # 입력받을 인자값 등록
     parser.add_argument('--refresh', required=False, default=False, action='store_true', help="Choose whether refresh or net")
     parser.add_argument('--predict', required=False, default=False, action='store_true', help="Predict and insert to mariaDB")
-    parser.add_argument('--table_list', required=False, nargs='+', type=str, help="Choose table to use / TGBIMAGE, DEPTHIMAGE, HSIIMAGE, RESULT")
+    parser.add_argument('--table_list', required=False, nargs='+', type=str, help="Choose table to use / RGBIMAGE, DEPTHIMAGE, HSIIMAGE, RESULT")
     
     args = parser.parse_args()
     
@@ -133,8 +133,8 @@ if __name__ == '__main__':
     cl = OPCUA_client("opc.tcp://localhost:51210/UA/SampleServer")
     
     db_schema = cl.get_db_schema()            
-    
-    db = MariaDB(host='127.0.0.1', port=3306, user='root', password='13130132', db='opcua', db_schema=db_schema, args = args)       # MariaDB 연결
+    print(f"db_schema : {db_schema}")
+    db = MariaDB(host='127.0.0.1', port=3306, user='root', password='1234', db='opcua4', db_schema=db_schema, args = args)       # MariaDB 연결
     db.connect()
     
     if args.refresh:
@@ -148,7 +148,8 @@ if __name__ == '__main__':
     
     if args.predict:            
         print(f"Start predict..")
-        predict()           # predict 함수 실행하여 실시간 inference 및 DB에 값 저장 진행
-    
+        predict()   # predict 함수 실행하여 실시간 inference 및 DB에 값 저장 진행
     else:
         exit()
+
+    db.close()

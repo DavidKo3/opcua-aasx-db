@@ -32,8 +32,14 @@ def get_aasx_db_schema(client:Client, name_space:str): # 이 함수를 재귀적
     tp_list = DB_TABLE.get_children(refs=47)  # choose node that has property
     tp_list = list(set(tp_list))    # delete duplicated
     table_list = [node for node in tp_list if node.get_display_name().Text != "SemanticId" and node.get_display_name().Text != "Identification"]
-    
+
+    # print(f"table_list :{table_list}")
+
+
     property_list = get_property_schema(table_list)
+
+    # print(f"property_list :{property_list}")
+
     schema_dict = create_schema_dict(property_list)
     
     return schema_dict      # 완성된 DB 스키마 정보 반환

@@ -22,19 +22,21 @@ class MariaDB:
     def create_table(self):
         date_time_sql = "ts DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
         value_type_sql = "DECIMAL(10,2)"
-        temp_sql = f""
-        
+
         for table_name, column_names in self.db_schema.items():
+            temp_sql = f""
             if table_name not in self.args.table_list:
                 continue
             
             for cl_sql in column_names:
                 temp_sql += f"{cl_sql} {value_type_sql}, "
-                
+
             sql = f"CREATE TABLE IF NOT EXISTS {table_name}" + f"({date_time_sql}, {temp_sql})"
+
             sql = sql[:-3] + ")"        # postprocess for last column
             print(f"{table_name} created..")
             self.execute_sql(sql)
+        
         
     def delete_table(self):
         for table_name, column_names in self.db_schema.items():
@@ -42,14 +44,20 @@ class MariaDB:
                 continue
             
             sql = f"DROP TABLE {table_name}"
+            # sql = f"DELETE FROM {table_name}"
             self.execute_sql(sql)
             print(f"{table_name} deleted..")
+
         
     def insert_value(self, table_name:str, column_name:str, val:float):
+       
         sql = f"INSERT INTO {table_name}({column_name}) VALUES ({val})"
+        print(f"sql :{sql}")
         self.execute_sql(sql)
-        
+
     def insert_predicted(self, val:int):
         sql = f"INSERT INTO RESULT(RESULT_TOMATO_RIPENESS) VALUES ({val})"
         self.execute_sql(sql)
-        
+
+    def close(self):
+        self.conn.close()   # Connection information
