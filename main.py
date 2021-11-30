@@ -128,11 +128,7 @@ if __name__ == '__main__':
     cl = OPCUA_client("opc.tcp://localhost:51210/UA/SampleServer")
     
     db_schema = cl.get_db_schema()            
-# <<<<<<< HEAD
-#     print(f"db_schema : {db_schema}")gitgi
-#     db = MariaDB(host='127.0.0.1', port=3306, user='root', password='1234', db='opcua4', db_schema=db_schema, args = args)       # MariaDB 연결
-# =======
-    
+
     if args.table_list == None:     # if table_list empty
         args.table_list = list(db_schema.keys())
     

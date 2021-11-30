@@ -68,7 +68,7 @@ if __name__ =="__main__":
     print(torch.cuda.get_device_name(device))
 
     batch_size = 8
-    epochs = 55
+    epochs = 56
 
     model = None
     if torch.cuda.is_available():
