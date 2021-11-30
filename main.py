@@ -96,11 +96,8 @@ def predict():
          print(f"Total test length: {len(file)}")
          for num in range(len(file)):
             transformed_img, label = test_dataloader[num]
-            # volr.volumerender_sim(transformed_img.numpy(), 256, 256, 256)
 
-            # model = MobileNet().to(device)
             input_expands_tensor = transformed_img.unsqueeze(0) #[ch x with x height]-> [1 xch x with x height]
-            model(input_expands_tensor.cuda())
 
             checkpoint = torch.load(PATH)
             model.load_state_dict(checkpoint["model_state_dict"])
