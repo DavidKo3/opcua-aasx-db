@@ -39,7 +39,6 @@ def train(model, criterion, train_dataset, train_dataloader, optimizer, schedule
             loss.backward()
             optimizer.step()
 
-
             train_loss += loss.item()
             epoch_loss += loss.item()
             if i % 5 == 4:
