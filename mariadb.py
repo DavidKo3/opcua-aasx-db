@@ -51,7 +51,6 @@ class MariaDB:
 
         
     def insert_value(self, table_name:str, column_name:str, val:float):
-       
         sql = f"INSERT INTO {table_name}({column_name}) VALUES ({val})"
         print(f"sql :{sql}")
         self.execute_sql(sql)
