@@ -69,7 +69,7 @@ if __name__ =="__main__":
     batch_size = 8
     epochs = 56
 
-    model = Nonegit
+    model = None
     if torch.cuda.is_available():
         model = MobileNet(num_classes=6).to(device)
 
